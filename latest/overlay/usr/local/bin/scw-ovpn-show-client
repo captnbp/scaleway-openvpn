@@ -20,14 +20,13 @@ get () {
 
 set_common() {
     ca_crt="$(get ca.crt)"
-    dh2048="$(get dh2048.pem)"
     tls_auth="$(get ta.key)"
 }
 
 
 set_client_specific () {
-    key="$(get ${client_name}.key)"
-    cert="$(get ${client_name}.crt)"
+    key="$(get private/${client_name}.key)"
+    cert="$(get issued/${client_name}.crt)"
 }
 
 
@@ -58,15 +57,16 @@ ${cert}
 <ca>
 ${ca_crt}
 </ca>
-<dh>
-${dh2048}
-</dh>
 
 # hardening
 remote-cert-tls server
 
 $(optional tls-version-min "${openvpn_tls_version_min}")
-$(optional tls-cipher "${openvpn_tls_cipher}")
+# TLS 1.3 encryption settings
+$(optional tls-ciphersuites "${openvpn_tls_ciphersuites}")
+# use the NSA's recommended curve
+$(optional ecdh-curve "${openvpn_ecdh_curve}")
+
 $(optional cipher "${openvpn_cipher}")
 $(optional auth "${openvpn_auth}")
 

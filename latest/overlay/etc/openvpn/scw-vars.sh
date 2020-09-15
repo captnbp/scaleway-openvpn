@@ -15,10 +15,18 @@ export ipv4_prefix='100.64'
 export ipv4_dns_servers="$(host_ipv4_dns)"
 
 export easyrsa="/etc/openvpn/easy-rsa"
-export easyrsa_keys="${easyrsa}/keys"
-export openvpn_tls_cipher=''
-export openvpn_cipher='AES-256-CBC'
-export openvpn_tls_version_min='1.2'
+export easyrsa_keys="${easyrsa}/pki"
+
+export openvpn_tls_version_min='1.3'
+
+# TLS 1.3 encryption settings
+export openvpn_ecdh_curve="secp384r1"
+export openvpn_tls_ciphersuites='TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256'
+
+# TLS 1.2 encryption settings
+export openvpn_tls_cipher="TLS-ECDHE-ECDSA-WITH-CHACHA20-POLY1305-SHA256:TLS-ECDHE-RSA-WITH-CHACHA20-POLY1305-SHA256:TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256:TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256"
+
+export openvpn_cipher='AES-128-GCM'
 export openvpn_auth='SHA256'
 
 export ipv4_net="${ipv4_prefix}.0.0/16"

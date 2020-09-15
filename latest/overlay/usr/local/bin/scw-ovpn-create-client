@@ -21,6 +21,5 @@ for client_name in "$@"; do
 	fail "There already is a certificate with name '${client_name}'" 2
     fi
 
-    . ./vars
-    ./pkitool "${client_name}"
+    ./easyrsa build-client-full "${client_name}" nopass
 done

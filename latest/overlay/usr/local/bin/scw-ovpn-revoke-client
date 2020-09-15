@@ -13,7 +13,6 @@ client_name="$(expect "$1" 'missing client name')"
 
 cd "${easyrsa}"
 
-. ./vars
-./revoke-full "${client_name}"
+./easyrsa revoke "${easyrsa_keys}/issued/${client_name}.crt"
 
 systemctl reload openvpn

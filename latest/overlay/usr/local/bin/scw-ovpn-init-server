@@ -20,25 +20,17 @@ logdo () {
     "$program" "$@"
 }
 
-
 mkdir -p "${easyrsa}"
+cp vars "${easyrsa}"
 cd "${easyrsa}"
-cp /usr/share/easy-rsa/* .
+cp -a /usr/share/easy-rsa/* .
 
-source ./vars
+./easyrsa init-pki
+./easyrsa build-ca nopass
+./easyrsa gen-crl
+./easyrsa build-server-full myvpn nopass
 
-logdo ./clean-all
-logdo ./pkitool --initca
-logdo ./pkitool --server myvpn
-logdo ./build-dh
-
-logdo openvpn --genkey --secret "${KEY_DIR}"/ta.key
-
-# easy-rsa does not generate the initial revocation list
-export KEY_CN='sample'
-export KEY_ALTNAMES='sample'
-logdo openssl ca -gencrl -out "${KEY_DIR}"/crl.pem -config "${KEY_CONFIG}"
-
+logdo openvpn --genkey --secret "${easyrsa}/pki/ta.key"
 
 touch "${easyrsa}"/done
 
